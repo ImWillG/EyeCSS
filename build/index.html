@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eye</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/pupil.css">
+</head>
+
+<body class="grid place-content-center min-h-screen bg-salm">
+    <div class="bg-white w-72 h-72 rounded-full grid place-content-center" id="iris">
+        <div class="bg-blue-300 w-24 h-24 rounded-full grid place-content-center" id="pupil">
+            <div class="bg-black w-8 h-8 rounded-full grid place-content-center" id="eye">
+
+            </div>
+        </div>
+    </div>
+    <div class="bg-black h-20 w-60 opacity-50" id="shadow"></div>
+
+</body>
+<script>
+    function init() {
+        pupil = document.getElementById('pupil');
+        iris = document.getElementById('iris');
+    }
+
+
+
+    function handleMouseMove(event) {
+        var eventDoc, doc, body;
+        event = event || window.event;
+
+
+        var irisRadius = iris.getBoundingClientRect().width / 2;
+        var pupilRadius = pupil.getBoundingClientRect().width / 2;
+
+        let centerX = iris.offsetLeft + iris.offsetWidth / 2;
+        let centerY = iris.offsetTop + iris.offsetHeight / 2;
+
+        var clientX = event.clientX;
+        var clientY = event.clientY;
+
+        var offsetX = clientX - centerX
+        var offsetY = clientY - centerY
+        var dist = Math.sqrt(offsetX ** 2 + offsetY ** 2) - irisRadius
+        const angle = Math.atan(offsetY / offsetX);
+
+
+        if ((offsetX ** 2 + offsetY ** 2) < ((irisRadius - pupilRadius - 70) ** 2)) {
+            pupil.animate({
+                left: `${clientX}px`,
+                top: `${clientY}px`,
+
+            }, { duration: 1000, fill: "forwards" })
+        }
+        else {
+            if (clientX >= centerX) {
+                pupil.animate({
+                    left: `${Math.cos(angle) * (irisRadius - pupilRadius - 70) + centerX}px`,
+                    top: `${Math.sin(angle) * (irisRadius - pupilRadius - 70) + centerY}px`
+
+                }, { duration: 1000, fill: "forwards" })
+            } else {
+                pupil.animate({
+                    left: `${Math.cos(angle) * -(irisRadius - pupilRadius - 70) + centerX}px`,
+                    top: `${Math.sin(angle) * -(irisRadius - pupilRadius - 70) + centerY}px`
+
+                }, { duration: 1000, fill: "forwards" })
+            }
+        }
+
+    }
+
+    document.onmousemove = handleMouseMove;
+    window.onload = init;
+</script>
+
+</html>
