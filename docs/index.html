@@ -39,8 +39,14 @@
         let centerX = iris.offsetLeft + iris.offsetWidth / 2;
         let centerY = iris.offsetTop + iris.offsetHeight / 2;
 
-        var clientX = event.clientX;
-        var clientY = event.clientY;
+        var clientX, clientY;
+        if (event.type.startsWith('touch')) {
+            clientX = event.touches[0].clientX;
+            clientY = event.touches[0].clientY;
+        } else {
+            clientX = event.clientX;
+            clientY = event.clientY;
+        }
 
         var offsetX = clientX - centerX
         var offsetY = clientY - centerY
@@ -73,7 +79,8 @@
 
     }
 
-    document.onmousemove = handleMouseMove;
+    document.addEventListener('mousemove', handleMove);
+    document.addEventListener('touchmove', handleMove);
     window.onload = init;
 </script>
 
